@@ -31,7 +31,13 @@
 
     html, body {
       height: 100%;
-      cursor: none;
+    }
+
+    /* Hanya sembunyikan cursor default jika bukan touch device */
+    @media (hover: hover) and (pointer: fine) {
+      html, body {
+        cursor: none;
+      }
     }
 
     body {
@@ -46,36 +52,45 @@
       user-select: none;
     }
 
-    /* Custom cursor styles */
-    .cursor-dot {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 8px;
-      height: 8px;
-      background: var(--teal-bright);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 15px var(--teal), 0 0 30px var(--teal-dim);
-      transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
-      mix-blend-mode: difference;
+    /* Custom cursor styles - hanya muncul di desktop */
+    @media (hover: hover) and (pointer: fine) {
+      .cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 8px;
+        background: var(--teal-bright);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 15px var(--teal), 0 0 30px var(--teal-dim);
+        transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
+        mix-blend-mode: difference;
+      }
+
+      .cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 32px;
+        height: 32px;
+        border: 1.5px solid var(--teal-line);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        background: transparent;
+      }
     }
 
-    .cursor-ring {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 32px;
-      height: 32px;
-      border: 1.5px solid var(--teal-line);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      background: transparent;
+    /* Sembunyikan cursor di mobile */
+    @media (hover: none) and (pointer: coarse) {
+      .cursor-dot, .cursor-ring {
+        display: none !important;
+      }
     }
 
     /* Efek klik: ripple */
@@ -219,7 +234,7 @@
       z-index: 2;
       max-width: 460px;
       margin: 0 auto;
-      padding: 72px 28px 60px;
+      padding: 72px 28px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -309,8 +324,11 @@
       animation: fadeRise .8s ease-out .16s forwards;
     }
 
-    .handle, .social, button {
-      cursor: none;
+    /* Hanya sembunyikan cursor di desktop */
+    @media (hover: hover) and (pointer: fine) {
+      .handle, .social, button {
+        cursor: none;
+      }
     }
 
     .handle {
@@ -627,6 +645,28 @@
       color: var(--teal-bright);
     }
 
+    /* Footer */
+    .footer {
+      width: 100%;
+      text-align: center;
+      margin-top: 52px;
+      padding: 20px 0 0;
+      opacity: 0;
+      animation: fadeRise .8s ease-out .66s forwards;
+    }
+
+    .footer-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--steel-dim);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-text .footer-name {
+      color: var(--teal);
+      font-weight: 600;
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -673,7 +713,7 @@
       .fog, .mote, .pfp-ring, .moth .wings, .click-ripple, .click-particle {
         animation: none !important;
       }
-      .pfp-wrap, .name, .handle, .tagline, .section {
+      .pfp-wrap, .name, .handle, .tagline, .section, .footer {
         animation: none !important;
         opacity: 1 !important;
         transform: none !important;
@@ -682,9 +722,9 @@
   </style>
 </head>
 <body>
-  <!-- Custom cursor elements -->
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+  <!-- Custom cursor elements - hanya akan terlihat di desktop -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
   <div class="fog" aria-hidden="true"></div>
   <svg class="grain" aria-hidden="true">
@@ -732,11 +772,10 @@
       </div>
       <ul class="skills">
         <li class="skill">
-          <span class="skill-text">PvP <span class="ver">1.8 (BEDWARS)</span></span>
+          <span class="skill-text">PvP <span class="ver">1.8 (Bedwars)</span></span>
         </li>
         <li class="skill">
-          <span class="skill-text">PvP  <span class="ver">1.9 (CPVP)</span></span>
-        
+          <span class="skill-text">PvP <span class="ver">1.9 (CPVP)</span></span>
         </li>
       </ul>
       
@@ -746,7 +785,7 @@
         <div class="crack-line">
         </div>
         <div class="crack-line">
-          <span class="crack-value">using crack rn</span>
+          <span class="crack-value">itsmelayer6</span>
         </div>
       </div>
     </section>
@@ -810,6 +849,11 @@
         </a>
       </div>
     </section>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p class="footer-text">©2026 Layer6
+    </div>
   </main>
 
   <div class="toast" id="toast">
@@ -819,6 +863,9 @@
 
   <script>
     (function() {
+      // Deteksi apakah perangkat touch screen
+      const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+      
       // --- Ambient particles ---
       var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!reduceMotion) {
@@ -839,54 +886,78 @@
         }
       }
 
-      // --- Custom cursor ---
-      const cursorDot = document.getElementById('cursorDot');
-      const cursorRing = document.getElementById('cursorRing');
-      let mouseX = window.innerWidth / 2;
-      let mouseY = window.innerHeight / 2;
-      let ringX = mouseX;
-      let ringY = mouseY;
+      // --- Custom cursor (hanya untuk desktop) ---
+      if (!isTouchDevice) {
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        
+        if (cursorDot && cursorRing) {
+          cursorDot.style.display = 'block';
+          cursorRing.style.display = 'block';
+          
+          let mouseX = window.innerWidth / 2;
+          let mouseY = window.innerHeight / 2;
+          let ringX = mouseX;
+          let ringY = mouseY;
 
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursorDot.style.left = mouseX + 'px';
-        cursorDot.style.top = mouseY + 'px';
-      });
+          document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+          });
 
-      function animateRing() {
-        ringX += (mouseX - ringX) * 0.2;
-        ringY += (mouseY - ringY) * 0.2;
-        cursorRing.style.left = ringX + 'px';
-        cursorRing.style.top = ringY + 'px';
-        requestAnimationFrame(animateRing);
+          function animateRing() {
+            ringX += (mouseX - ringX) * 0.2;
+            ringY += (mouseY - ringY) * 0.2;
+            cursorRing.style.left = ringX + 'px';
+            cursorRing.style.top = ringY + 'px';
+            requestAnimationFrame(animateRing);
+          }
+          animateRing();
+
+          // Efek hover pada elemen interaktif
+          const hoverTargets = document.querySelectorAll('a, button, .skill, .social, .handle, .crack-value');
+          hoverTargets.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+              cursorDot.style.width = '16px';
+              cursorDot.style.height = '16px';
+              cursorDot.style.background = 'var(--teal)';
+              cursorRing.style.width = '48px';
+              cursorRing.style.height = '48px';
+              cursorRing.style.borderColor = 'var(--teal-bright)';
+              cursorRing.style.background = 'rgba(79,184,166,0.08)';
+            });
+            el.addEventListener('mouseleave', () => {
+              cursorDot.style.width = '8px';
+              cursorDot.style.height = '8px';
+              cursorDot.style.background = 'var(--teal-bright)';
+              cursorRing.style.width = '32px';
+              cursorRing.style.height = '32px';
+              cursorRing.style.borderColor = 'var(--teal-line)';
+              cursorRing.style.background = 'transparent';
+            });
+          });
+
+          document.addEventListener('mouseleave', () => {
+            cursorDot.style.opacity = '0';
+            cursorRing.style.opacity = '0';
+          });
+          
+          document.addEventListener('mouseenter', () => {
+            cursorDot.style.opacity = '1';
+            cursorRing.style.opacity = '1';
+          });
+        }
+      } else {
+        // Untuk touch device, pastikan cursor tidak muncul
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        if (cursorDot) cursorDot.style.display = 'none';
+        if (cursorRing) cursorRing.style.display = 'none';
       }
-      animateRing();
 
-      // Efek hover pada elemen interaktif (termasuk crack-value)
-      const hoverTargets = document.querySelectorAll('a, button, .skill, .social, .handle, .crack-value');
-      hoverTargets.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursorDot.style.width = '16px';
-          cursorDot.style.height = '16px';
-          cursorDot.style.background = 'var(--teal)';
-          cursorRing.style.width = '48px';
-          cursorRing.style.height = '48px';
-          cursorRing.style.borderColor = 'var(--teal-bright)';
-          cursorRing.style.background = 'rgba(79,184,166,0.08)';
-        });
-        el.addEventListener('mouseleave', () => {
-          cursorDot.style.width = '8px';
-          cursorDot.style.height = '8px';
-          cursorDot.style.background = 'var(--teal-bright)';
-          cursorRing.style.width = '32px';
-          cursorRing.style.height = '32px';
-          cursorRing.style.borderColor = 'var(--teal-line)';
-          cursorRing.style.background = 'transparent';
-        });
-      });
-
-      // --- Efek klik ---
+      // --- Efek klik (untuk semua perangkat) ---
       function createClickEffect(x, y) {
         const ripple = document.createElement('div');
         ripple.className = 'click-ripple';
@@ -912,9 +983,18 @@
         }
       }
 
+      // Event klik untuk desktop dan touch
       document.addEventListener('click', (e) => {
         createClickEffect(e.clientX, e.clientY);
       });
+
+      // Event touch khusus untuk mobile
+      document.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length > 0) {
+          const touch = e.touches[0];
+          createClickEffect(touch.clientX, touch.clientY);
+        }
+      }, { passive: true });
 
       // --- Copy function ---
       function copyText(text, label) {
@@ -951,15 +1031,6 @@
       document.getElementById('discordBtn').addEventListener('click', function(e) {
         e.stopPropagation();
         copyText('@OnlyLayer6', 'Copied @OnlyLayer6 — paste it in Discord');
-      });
-
-      document.addEventListener('mouseleave', () => {
-        cursorDot.style.opacity = '0';
-        cursorRing.style.opacity = '0';
-      });
-      document.addEventListener('mouseenter', () => {
-        cursorDot.style.opacity = '1';
-        cursorRing.style.opacity = '1';
       });
 
     })();
